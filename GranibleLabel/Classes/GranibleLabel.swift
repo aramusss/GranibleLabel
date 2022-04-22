@@ -55,11 +55,10 @@ public class GranibleLabel: UIView {
     public var animate = false
     public var infinity = false
     
-    private let gradientLabel: UILabel = {
+    public let gradientLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         
-        addSubview(label)
         return label
     }()
     private let gradient: CAGradientLayer = {
@@ -158,6 +157,10 @@ public class GranibleLabel: UIView {
 extension GranibleLabel {
     
     private func layout() {
+        if gradientLabel.superview == nil {
+            self.addSubview(gradientLabel)
+        }
+        
         addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-0-[label]-0-|", metrics: nil, views: ["label": gradientLabel]))
         addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-0-[label]-0-|", metrics: nil, views: ["label": gradientLabel]))
     }
