@@ -58,6 +58,8 @@ public class GranibleLabel: UIView {
     private let gradientLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
+        
+        addSubview(label)
         return label
     }()
     private let gradient: CAGradientLayer = {
@@ -76,7 +78,6 @@ public class GranibleLabel: UIView {
         super.init(frame: frame)
         
         backgroundColor = .clear
-        addSubview(gradientLabel)
         layout()
     }
     
@@ -84,18 +85,18 @@ public class GranibleLabel: UIView {
         super.init(coder: aDecoder)
         
         backgroundColor = .clear
-        addSubview(gradientLabel)
         layout()
     }
     
     override public func draw(_ rect: CGRect) {
         super.draw(rect)
         
+        gradientLabel.layoutIfNeeded()
         setGradientLayer()
     }
     
     private func setGradientLayer() {
-        gradient.frame = bounds
+        gradient.frame = CGRect(x: 0, y: 0, width: frame.width, height: frame.height)
         gradient.mask = gradientLabel.layer
         layer.addSublayer(gradient)
     }
@@ -157,10 +158,8 @@ public class GranibleLabel: UIView {
 extension GranibleLabel {
     
     private func layout() {
-        gradientLabel.topAnchor.constraint(equalTo: topAnchor).isActive = true
-        gradientLabel.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
-        gradientLabel.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
-        gradientLabel.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
+        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-0-[label]-0-|", metrics: nil, views: ["label": gradientLabel]))
+        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-0-[label]-0-|", metrics: nil, views: ["label": gradientLabel]))
     }
     
 }
